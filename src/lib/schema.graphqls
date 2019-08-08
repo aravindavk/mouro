@@ -53,3 +53,8 @@ type Mutation {
     # edgeJWT: JWT with the following mandatory fields: iss, sub, type, iat. Optional: tag,claim,encPriv,encShar
     addEdge(edgeJWT: String): Edge
 }
+
+type Subscription {
+    #New edgeAdded
+    edgeAdded(fromDID:[String], toDID:[String], type:[String], tag:[String]): Edge
+}

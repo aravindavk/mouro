@@ -45,6 +45,7 @@
     "ethr-did-resolver": "^0.2.0",
     "express": "^4.17.1",
     "graphql": "^14.2.0",
+    "graphql-subscriptions": "^1.1.0",
     "pg": "^7.11.0",
     "serverless": "^1.42.3",
     "serverless-domain-manager": "^3.2.1",
