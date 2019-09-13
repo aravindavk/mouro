@@ -1,0 +1,23 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Local Sqlite",
+      "type": "node",
+      "request": "launch",
+      "args": ["server.ts"],
+      "runtimeArgs": ["--harmony", "--nolazy", "-r", "ts-node/register",],
+      "sourceMaps": true,
+      "env": {
+        "PORT": "3000",
+        "SQLITE_FILE": "./mouro.sqlite",
+      },
+      "cwd": "${workspaceRoot}/src",
+      "protocol": "inspector",
+      "smartStep": true,
+    }
+  ]
+}

@@ -26,7 +26,7 @@ type Edge {
     # to field of the edge. "sub" on the JWT
     to: Identity!
     # type of the edge. "type" on the JWT
-    type: String!
+    type: String
     # date of the issuance of the edge. "iat" on the JWT
     time: Int!
     # tag of the edge. "tag" on the JWT

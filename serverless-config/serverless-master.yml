@@ -28,6 +28,9 @@ custom:
       - functionErrors
       - functionInvocations
       - functionDuration
+  prune:
+    automatic: true
+    number: 5
   
 functions:
   - ${file(serverless-config/functions.yml)}
