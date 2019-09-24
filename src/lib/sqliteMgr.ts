@@ -25,7 +25,7 @@ module.exports = class SQLiteMgr implements StorageInterface {
       hash CHAR(128) PRIMARY KEY, 
       "from" VARCHAR(64) NOT NULL, 
       "to" VARCHAR(64) NOT NULL, 
-      type VARCHAR(128) NOT NULL, 
+      type VARCHAR(128) NULL, 
       "time" INTEGER NOT NULL, -- from iat
       visibility VARCHAR(4) NOT NULL,
       retention INTEGER NULL,
