@@ -15,4 +15,4 @@ import {WSConnectHandler} from "./handlers/ws_connect";
 const wsConnectHandler = (new WSConnectHandler(authMgr,storageMgr));
 
 //Exports for serverless
-exports.wsConnect = wsConnectHandler;
+exports.wsConnect = wsConnectHandler.handle;
