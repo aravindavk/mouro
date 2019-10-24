@@ -6,3 +6,5 @@ graphql:
         path: /graphql
         method: post
         cors: true
+wsConnect:
+    description: ApiGateway WebSocket Connect Handler
