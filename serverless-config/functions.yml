@@ -8,3 +8,7 @@ graphql:
         cors: true
 wsConnect:
     description: ApiGateway WebSocket Connect Handler
+    handler: src/ws_handler.wsConnect
+    events:
+    - websocket:
+        route: $connect
