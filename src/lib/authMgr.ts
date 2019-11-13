@@ -23,7 +23,7 @@ export type VerifiedJWTType = {
 export class AuthMgr {
 
     constructor() {
-        require('ethr-did-resolver').default()
+        require('ethr-did-resolver').default({rpcUrl: 'https://mainnet.infura.io/v3/5ffc47f65c4042ce847ef66a3fa70d4c'})
     }
 
     async verify(authToken: string): Promise<VerifiedJWTType> {
