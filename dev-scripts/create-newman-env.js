@@ -14,6 +14,15 @@ const credentials2 = new Credentials({
     appName: 'Test2', did: did2, privateKey: privateKey2
 })
 
+const webDid = 'did:web:uport.space';
+const credentialsUportSpace = new Credentials({
+    appName: 'TestUportSpace', did: webDid, privateKey: process.env.UPORT_SPACE_PRIVATE_KEY
+})
+
+//Nacl-DID
+const naclDidLib = require('nacl-did')
+const naclIdentity = naclDidLib.createIdentity()
+const naclDid = naclIdentity.did;
 
 const f=(async()=>{
     //Create AuthToken
@@ -35,6 +44,15 @@ const f=(async()=>{
     }
     const edgeJWT  = await credentials2.signJWT(edgePayload);
     const edgeHash = blake.blake2bHex(edgeJWT);
+
+    //Create NaClEdge
+    const naclEdgeJWT = naclIdentity.createJWT(edgePayload)
+    const naclEdgeHash = blake.blake2bHex(naclEdgeJWT);
+
+    //Create uPortSpaceEdge
+    const webEdgeJWT = await credentialsUportSpace.signJWT(edgePayload);
+    const webEdgeHash = blake.blake2bHex(webEdgeJWT);
+
 
     //Create Edge JWT with AUD
     const edgeAudPayload={
@@ -75,12 +93,17 @@ const f=(async()=>{
         authToken: authToken,
         did: did,
         did2: did2,
+        naclDid: naclDid,
+        webDid: webDid,
         edgeJWT: edgeJWT,
         edgeHash: edgeHash,
+        naclEdgeJWT: naclEdgeJWT,
+        naclEdgeHash: naclEdgeHash,
+        webEdgeJWT: webEdgeJWT,
+        webEdgeHash: webEdgeHash,
         edgeAudJWT: edgeAudJWT,
         edgeAudHash: edgeAudHash,
         authToken2: authToken2
-        
     }
 
     const envId=(new Date()).getTime()
