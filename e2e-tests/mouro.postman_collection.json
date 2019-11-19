@@ -148,6 +148,158 @@
 					"response": []
 				},
 				{
+					"name": "addEdge NaCl",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "18b3cd09-8557-44c3-9ae9-48ba200fc422",
+								"exec": [
+									"pm.test(\"response is ok\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"response should be okay to process\", function () { ",
+									"    pm.response.to.not.be.error; ",
+									"});",
+									"",
+									"pm.test(\"hash returned should be the naclEdgeHash\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.addEdge.hash).to.eql(pm.environment.get(\"naclEdgeHash\"));",
+									"});",
+									"",
+									"pm.test(\"from returned should be the didNacl\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.addEdge.from.did).to.eql(pm.environment.get(\"naclDid\"));",
+									"});",
+									"",
+									"pm.test(\"to returned should be the naclDid\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.addEdge.to.did).to.eql(pm.environment.get(\"did\"));",
+									"});",
+									"pm.test(\"type returned should be ALL\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.addEdge.type).to.eql(\"ALL\");",
+									"});",
+									"pm.test(\"visibility returned should be ANY\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.addEdge.visibility).to.eql(\"ANY\");",
+									"});",
+									"pm.test(\"tag returned should be test\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.addEdge.tag).to.eql(\"test\");",
+									"});",
+									"pm.test(\"jwt returned should be naclEdgeJWT\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.addEdge.jwt).to.eql(pm.environment.get(\"naclEdgeJWT\"));",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"query\": \"mutation{addEdge(edgeJWT:\\\"{{naclEdgeJWT}}\\\"){hash,jwt,from {did},to{did},type,time,visibility,retention,tag,data}}\"\n}"
+						},
+						"url": {
+							"raw": "{{mouroUrl}}/graphql",
+							"host": [
+								"{{mouroUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addEdge WebDid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "18b3cd09-8557-44c3-9ae9-48ba200fc422",
+								"exec": [
+									"pm.test(\"response is ok\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"response should be okay to process\", function () { ",
+									"    pm.response.to.not.be.error; ",
+									"});",
+									"",
+									"pm.test(\"hash returned should be the webEdgeHash\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.addEdge.hash).to.eql(pm.environment.get(\"webEdgeHash\"));",
+									"});",
+									"",
+									"pm.test(\"from returned should be the webDid\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.addEdge.from.did).to.eql(pm.environment.get(\"webDid\"));",
+									"});",
+									"",
+									"pm.test(\"to returned should be the did\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.addEdge.to.did).to.eql(pm.environment.get(\"did\"));",
+									"});",
+									"pm.test(\"type returned should be ALL\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.addEdge.type).to.eql(\"ALL\");",
+									"});",
+									"pm.test(\"visibility returned should be ANY\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.addEdge.visibility).to.eql(\"ANY\");",
+									"});",
+									"pm.test(\"tag returned should be test\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.addEdge.tag).to.eql(\"test\");",
+									"});",
+									"pm.test(\"jwt returned should be webEdgeJWT\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.addEdge.jwt).to.eql(pm.environment.get(\"webEdgeJWT\"));",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"query\": \"mutation{addEdge(edgeJWT:\\\"{{webEdgeJWT}}\\\"){hash,jwt,from {did},to{did},type,time,visibility,retention,tag,data}}\"\n}"
+						},
+						"url": {
+							"raw": "{{mouroUrl}}/graphql",
+							"host": [
+								"{{mouroUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "addEdge (audience)",
 					"event": [
 						{

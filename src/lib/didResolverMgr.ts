@@ -1,23 +1,29 @@
 import { Resolver } from 'did-resolver'
 import * as ethr from 'ethr-did-resolver'
+import * as webResolver from 'web-did-resolver'
+import { resolver as naclDidResolver } from 'nacl-did'
 
 export class DidResolverMgr {
 
-    resolver: any //TODO: Fix resolver type
+    private resolver :Resolver 
+    resolvers :any
 
     constructor(){
-        let resolvers={};
+        this.resolvers={
+            ...webResolver.getResolver(),
+            nacl: naclDidResolver
+        };
         
         if(process.env.INFURA_PROJECT_ID){
             const ethrDidResolverConfig = { 
                 rpcUrl: 'https://mainnet.infura.io/v3/'+process.env.INFURA_PROJECT_ID 
             }
             const ethrResolver = ethr.getResolver(ethrDidResolverConfig)
-            resolvers = {...ethrResolver};
+            this.resolvers.ethr=ethrResolver.ethr;
         }else{
             console.error("no INFURA_PROJECT_ID env var. ethr-did-resolver not available")
         }
-        this.resolver = new Resolver(resolvers)
+        this.resolver = new Resolver(this.resolvers)
     }
 
     getResolver(){
