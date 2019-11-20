@@ -7,17 +7,22 @@ const credentials = new Credentials({
   appName: 'Test App', did, privateKey
 })
 
+import { DidResolverMgr } from '../didResolverMgr';
+jest.mock('../didResolverMgr')
+
 const didJWT = require('did-jwt')
 jest.mock("did-jwt");
 
 describe('AuthMgr', () => {
 
   let sut: AuthMgr;
+  let mockDidResolverMgr:DidResolverMgr=new DidResolverMgr();
   let validToken: string;
   const sub='0x0'
 
+
   beforeAll((done) =>{
-    sut = new AuthMgr();
+    sut = new AuthMgr(mockDidResolverMgr);
 
     credentials.createVerification({
       sub: sub
@@ -29,7 +34,6 @@ describe('AuthMgr', () => {
   test('empty constructor', () => {
     expect(sut).not.toBeUndefined();
   });
-
 
   describe("verify()", () => {
 

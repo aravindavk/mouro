@@ -4,6 +4,7 @@ import { QueryResolverMgr } from "../../lib/queryResolverMgr";
 import { AuthMgr } from "../../lib/authMgr";
 import { StorageMgr } from "../../lib/storageMgr";
 import { EdgeResolverMgr } from "../../lib/edgeResolverMgr";
+import { DidResolverMgr } from "../../lib/didResolverMgr";
 
 jest.mock("../../lib/schemaMgr");
 jest.mock("../../lib/queryResolverMgr");
@@ -15,10 +16,11 @@ describe('GraphQLHandler', () => {
     
     
     let sut:GraphQLHandler;
-    let mockAuthMgr:AuthMgr = new AuthMgr();
+    let mockDidResolverMgr:DidResolverMgr=new DidResolverMgr();
+    let mockAuthMgr:AuthMgr=new AuthMgr(mockDidResolverMgr);
     let mockStorageMgr:StorageMgr = new StorageMgr();
     let mockQueryResolverMgr:QueryResolverMgr = new QueryResolverMgr(mockAuthMgr,mockStorageMgr);
-    let mockEdgeResolverMgr:EdgeResolverMgr = new EdgeResolverMgr(mockStorageMgr);
+    let mockEdgeResolverMgr:EdgeResolverMgr = new EdgeResolverMgr(mockDidResolverMgr,mockStorageMgr);
     let mockSchemaMgr:SchemaMgr = new SchemaMgr(mockQueryResolverMgr,mockEdgeResolverMgr);
 
     beforeAll((done) =>{

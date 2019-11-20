@@ -11,6 +11,7 @@ provider:
    region: us-west-2
    environment:
       PG_URL: ${ssm:/mouro/master/PG_URL~true}
+      INFURA_PROJECT_ID: ${ssm:/mouro/master/INFURA_PROJECT_ID~true}
 
 custom: 
   customDomain:

@@ -8,6 +8,7 @@ const credentials = new Credentials({
 
 import { StorageMgr } from '../storageMgr';
 import { AuthMgr } from '../authMgr';
+import { DidResolverMgr } from '../didResolverMgr';
 
 jest.mock('../storageMgr')
 jest.mock('../authMgr')
@@ -16,7 +17,8 @@ describe('QueryResolverMgr', () => {
     
     let sut: QueryResolverMgr;
     let mockStorageMgr:StorageMgr=new StorageMgr();
-    let mockAuthMgr:AuthMgr=new AuthMgr();
+    let mockDidResolverMgr:DidResolverMgr=new DidResolverMgr();
+    let mockAuthMgr:AuthMgr=new AuthMgr(mockDidResolverMgr);
     let validToken='';
 
     beforeAll((done) =>{

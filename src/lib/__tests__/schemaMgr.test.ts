@@ -4,18 +4,20 @@ import { QueryResolverMgr } from '../queryResolverMgr';
 import { EdgeResolverMgr } from '../edgeResolverMgr';
 import { AuthMgr } from '../authMgr';
 import { StorageMgr } from '../storageMgr';
+import { DidResolverMgr } from '../didResolverMgr';
 
 jest.mock('../queryResolverMgr')
 jest.mock('../edgeResolverMgr')
 jest.mock('../storageMgr')
 
 describe('SchemaMgr', () => {
-    
-    let mockAuthMgr:AuthMgr=new AuthMgr();
+
+    let mockDidResolverMgr:DidResolverMgr=new DidResolverMgr();
+    let mockAuthMgr:AuthMgr=new AuthMgr(mockDidResolverMgr);
     let mockStorageMgr:StorageMgr= new StorageMgr();
 
     let mockQueryResolverMgr:QueryResolverMgr=new QueryResolverMgr(mockAuthMgr,mockStorageMgr);
-    let mockEdgeResolverMgr:EdgeResolverMgr=new EdgeResolverMgr(mockStorageMgr);
+    let mockEdgeResolverMgr:EdgeResolverMgr=new EdgeResolverMgr(mockDidResolverMgr,mockStorageMgr);
     let sut: SchemaMgr;
 
     beforeAll((done) =>{

@@ -6,6 +6,9 @@ const credentials = new Credentials({
     appName: 'Test App', did, privateKey
 })
 
+import { DidResolverMgr } from '../didResolverMgr';
+jest.mock('../didResolverMgr')
+
 import { StorageMgr } from '../storageMgr';
 jest.mock('../storageMgr')
 
@@ -15,13 +18,16 @@ jest.mock("did-jwt");
 describe('EdgeResolverMgr', () => {
     
     let sut: EdgeResolverMgr;
+    let mockDidResolverMgr:DidResolverMgr=new DidResolverMgr();
     let mockStorageMgr:StorageMgr=new StorageMgr();
     let validToken='';
+    let validTokenAud='';
 
     const sub='0x0'
+    const aud='someAudience'
 
     beforeAll((done) =>{
-        sut = new EdgeResolverMgr(mockStorageMgr);
+        sut = new EdgeResolverMgr(mockDidResolverMgr,mockStorageMgr);
 
         const payload={
             sub: did,
@@ -32,6 +38,17 @@ describe('EdgeResolverMgr', () => {
         credentials.signJWT(payload)
         .then((token: string)=>{
             validToken=token;
+            const payloadAud={
+                sub: did,
+                type: 'ALL',
+                tag: 'test',
+                data: 'somedata',
+                aud: aud
+            }
+            return credentials.signJWT(payloadAud)
+        })
+        .then((tokenAud: string)=>{
+            validTokenAud=tokenAud;
         }).then(done);
     })
 
@@ -43,7 +60,7 @@ describe('EdgeResolverMgr', () => {
     describe("addEdge()", () => {
 
         test('empty jwt', (done)=> {
-            didJWT.verifyJWT.mockImplementationOnce(()=>{throw Error('no JWT passed into decodeJWT')})
+            didJWT.decodeJWT.mockImplementationOnce(()=>{throw Error('no JWT passed into decodeJWT')})
             
             sut.addEdge('')
             .then(()=> {
@@ -57,8 +74,23 @@ describe('EdgeResolverMgr', () => {
 
 
         test('valid token', (done)=> {
+            didJWT.decodeJWT.mockReturnValue({payload: {}})
             didJWT.verifyJWT.mockResolvedValueOnce({payload: {iss: did, sub: sub}})
             sut.addEdge(validToken)
+            .then((resp: any)=> {
+                expect(resp).not.toBeNull();
+                expect(resp.from.did).toEqual(did)
+                done();
+            })
+            .catch( (err: Error)=>{
+                fail(err); done()
+            })
+        })
+        
+        test('aud field', (done)=>{
+            didJWT.decodeJWT.mockReturnValue({payload: {aud: aud}})
+            didJWT.verifyJWT.mockResolvedValueOnce({payload: {iss: did, sub: sub, aud: aud}})
+            sut.addEdge(validTokenAud)
             .then((resp: any)=> {
                 expect(resp).not.toBeNull();
                 expect(resp.from.did).toEqual(did)

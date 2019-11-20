@@ -8,6 +8,10 @@
       "PG_URL": {
             "description": "PostgreSQL endpoint url",
             "value": ""
+      },
+      "INFURA_PROJECT_ID":{
+          "description": "Infura ProjectId Token. Check https://infura.io/dashboard",
+          "value": ""
       }
     
     }

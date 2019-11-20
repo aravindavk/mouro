@@ -47,16 +47,15 @@ sls deploy --stage master
 ```
 
 ## Express Server
-
 Using Sqlite
 
 ```
-PORT=3000 SQLITE_FILE=./mouro.sqlite npm start 
+INFURA_PROJECT_ID=<your project id> PORT=3000 SQLITE_FILE=./mouro.sqlite npm start 
 ```
 
 Using Postgresql
 ```
-PORT=3000 PG_URL=postgres://..... npm start 
+INFURA_PROJECT_ID=<your project id> PORT=3000 PG_URL=postgres://..... npm start 
 ```
 
 

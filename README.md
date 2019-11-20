@@ -4,8 +4,6 @@ uPort Trust Graph Server (aka EdgeServer)
 [![CircleCI](https://circleci.com/gh/uport-project/mouro.svg?style=svg&circle-token=26fa9a6aff710aa959b22ffa15f7ef314face8b0)](https://circleci.com/gh/uport-project/mouro)
 [![codecov](https://codecov.io/gh/uport-project/mouro/branch/master/graph/badge.svg?token=ywlwzVP2fF)](https://codecov.io/gh/uport-project/mouro)
 
-
-:warning: *Deploy to Heroku not working since is a private repo* :warning:
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 

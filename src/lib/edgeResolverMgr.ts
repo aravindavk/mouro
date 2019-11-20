@@ -1,13 +1,16 @@
-const didJWT = require('did-jwt');
 const blake = require('blakejs')
 
 import { StorageMgr, PersistedEdgeType } from "./storageMgr";
+import { DidResolverMgr } from "./didResolverMgr";
+import * as didJWT from 'did-jwt'
 
 export class EdgeResolverMgr {
 
     storageMgr: StorageMgr;
+    didResolverMgr: DidResolverMgr;
 
-    constructor(storageMgr: StorageMgr) {
+    constructor(didResolverMgr: DidResolverMgr, storageMgr: StorageMgr) {
+        this.didResolverMgr = didResolverMgr
         this.storageMgr = storageMgr
     }
 
@@ -18,10 +21,24 @@ export class EdgeResolverMgr {
         const hash = blake.blake2bHex(edgeJWT)
         console.log("hash:"+hash);
 
+        
         //Verify that the body is a proper JWT
-        //This can take up to 3 secc
+        let verifyOptions: {resolver:any, audience?:string|undefined}={
+            resolver: this.didResolverMgr.getResolver()
+        }
+
+        //Verify audience to the recipient aud (yes is kind of a hack..)
+        console.log("decodeJWT...")
+        const decodedJWT = didJWT.decodeJWT(edgeJWT)
+        console.log(decodedJWT)
+        
+        if(decodedJWT.payload.aud){
+            verifyOptions.audience=decodedJWT.payload.aud
+        }
+        
+        //This can take up to 3 sec
         console.log("verifyJWT...")
-        const verifiedJWT = await didJWT.verifyJWT(edgeJWT);
+        const verifiedJWT = await didJWT.verifyJWT(edgeJWT,verifyOptions);
         console.log(verifiedJWT);
 
         const pl=verifiedJWT.payload;
