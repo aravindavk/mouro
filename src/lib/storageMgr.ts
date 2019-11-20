@@ -20,6 +20,19 @@ export type PersistedEdgeType = {
     jwt: string
 }
 
+export type PersistedWsConnectionType = {
+    hash: string,
+    from: string,
+    to: string,
+    type: string,
+    time: number,
+    visibility: string,
+    retention?: number,
+    tag?: string,
+    data?: any
+    jwt: string
+}
+
 export class StorageMgr {
 
     storage!: StorageInterface;

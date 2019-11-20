@@ -47,14 +47,14 @@ export class SchemaMgr {
             Mutation: {
                 addEdge: async (parent: any, args: any, context: any, info: any) => {
                     const res=await this.edgeResolverMgr.addEdge(args.edgeJWT)
-                    pubsub.publish('edgeAdded', { edgeAdded: res });
+                    pubsub.publish('EDGE_ADDED', { edgeAdded: res });
                     return res
                 }, 
             },
             Subscription: {
                 edgeAdded:{
                   subscribe: withFilter(
-                    () => pubsub.asyncIterator('edgeAdded'),
+                    () => pubsub.asyncIterator('EDGE_ADDED'),
                     (payload, args,context) => {
                       console.log("PAYLOAD")
                       console.log(payload)

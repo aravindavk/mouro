@@ -18,9 +18,12 @@ let schemaMgr = new SchemaMgr(queryResolverMgr,edgeResolverMgr);
 
 //Load handlers
 import {GraphQLHandler} from "./handlers/graphql";
+import {WSHandler} from "./handlers/ws";
 
 //Instanciate handlers
 const graphqlHandler = (new GraphQLHandler(schemaMgr)).getHandler()
+const wsHandler = (new WSHandler(schemaMgr)).handle;
 
 //Exports for serverless
 exports.graphql = graphqlHandler;
+exports.ws = wsHandler;

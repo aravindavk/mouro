@@ -35,11 +35,13 @@
     "uport-credentials": "^1.1.4"
   },
   "dependencies": {
+    "@types/aws-lambda": "^8.10.36",
     "@types/express": "^4.17.0",
     "@types/graphql": "^14.2.0",
     "@types/jest": "^24.0.12",
     "apollo-server-express": "^2.8.1",
     "apollo-server-lambda": "^2.3.1",
+    "aws-lambda-graphql": "^0.11.0",
     "blakejs": "^1.1.0",
     "did-jwt": "^3.0.0",
     "did-resolver": "^1.1.0",
@@ -58,7 +60,8 @@
     "sqlite": "^3.0.3",
     "ts-node": "^8.5.2",
     "typescript": "^3.7.2",
-    "web-did-resolver": "^1.2.0"
+    "web-did-resolver": "^1.2.0",
+    "zen-observable": "^0.8.15"
   },
   "jest": {
     "globals": {

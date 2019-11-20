@@ -1,0 +1,23 @@
+- Effect: Allow
+  Action:
+    - dynamodb:DeleteItem
+    - dynamodb:GetItem
+    - dynamodb:PutItem
+    - dynamodb:UpdateItem
+  Resource: !GetAtt ConnectionsDynamoDBTable.Arn
+- Effect: Allow
+  Action:
+    - dynamodb:BatchWriteItem
+    - dynamodb:DeleteItem
+    - dynamodb:GetItem
+    - dynamodb:PutItem
+    - dynamodb:Query
+    - dynamodb:Scan
+  Resource: !GetAtt SubscriptionsDynamoDBTable.Arn
+- Effect: Allow
+  Action:
+    - dynamodb:BatchWriteItem
+    - dynamodb:DeleteItem
+    - dynamodb:GetItem
+    - dynamodb:PutItem
+  Resource: !GetAtt SubscriptionOperationsDynamoDBTable.Arn

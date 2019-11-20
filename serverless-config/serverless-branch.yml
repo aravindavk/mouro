@@ -6,12 +6,14 @@ plugins:
   - serverless-plugin-aws-alerts
 
 provider:
-   name: aws
-   runtime: nodejs8.10
-   region: us-west-2
-   environment:
-      PG_URL: ${ssm:/mouro/develop/PG_URL~true}
-      INFURA_PROJECT_ID: ${ssm:/mouro/develop/INFURA_PROJECT_ID~true}
+  name: aws
+  runtime: nodejs10x
+  region: us-west-2
+  environment:
+    PG_URL: ${ssm:/mouro/develop/PG_URL~true}
+    INFURA_PROJECT_ID: ${ssm:/mouro/develop/INFURA_PROJECT_ID~true}
+  iamRoleStatements:
+    - ${file(serverless-config/iam-roles.yml)}
 
 custom: 
   customDomain:
@@ -24,3 +26,6 @@ custom:
   
 functions:
   - ${file(serverless-config/functions.yml)}
+
+resources:
+  - ${file(serverless-config/resources.yml)}
