@@ -7,13 +7,12 @@ plugins:
 
 provider:
   name: aws
-  runtime: nodejs10.x
+  runtime: nodejs8.10
   region: us-west-2
   environment:
     PG_URL: ${ssm:/mouro/master/PG_URL~true}
     INFURA_PROJECT_ID: ${ssm:/mouro/master/INFURA_PROJECT_ID~true}
-  iamRoleStatements:
-    - ${file(serverless-config/iam-roles.yml)}
+  iamRoleStatements: ${file(serverless-config/iam-roles.yml)}
 
 custom: 
   customDomain:
