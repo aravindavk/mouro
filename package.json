@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/uport-project/mouro#readme",
   "devDependencies": {
+    "@types/zen-observable": "^0.8.0",
     "aws-lambda": "^0.1.2",
     "aws-sdk-mock": "^4.3.1",
     "jest": "^24.8.0",

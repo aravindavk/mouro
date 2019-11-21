@@ -41,7 +41,7 @@ const server = new ApolloServer({
   }
 });
 
-import * as express from "express";
+import express from "express";
 const app = express();
 server.applyMiddleware({ app }); // app is from an existing express app
 
