@@ -1,10 +1,10 @@
-import { Context } from 'aws-lambda';
-import { APIGatewayWebSocketEvent,createWsHandler, DynamoDBSubscriptionManager, DynamoDBConnectionManager} from 'aws-lambda-graphql';
+import { Context, APIGatewayProxyResult } from 'aws-lambda';
+import { APIGatewayWebSocketEvent,createWsHandler, DynamoDBSubscriptionManager, DynamoDBConnectionManager, APIGatewayV2Handler} from 'aws-lambda-graphql';
 import { SchemaMgr } from '../lib/schemaMgr';
 
 export class WSHandler {
     
-    wsHandler: any;
+    wsHandler: APIGatewayV2Handler;
     schemaMgr: SchemaMgr;
 
     constructor (schemaMgr: SchemaMgr) {
@@ -24,19 +24,19 @@ export class WSHandler {
         });
     }
 
-
-    async handle(event: APIGatewayWebSocketEvent, context: Context) {
+    getHandler(){
+        return async (event: APIGatewayWebSocketEvent, context: Context): Promise<void |APIGatewayProxyResult> => {
         
-        if (
-            (event as APIGatewayWebSocketEvent).requestContext != null &&
-            (event as APIGatewayWebSocketEvent).requestContext.routeKey != null
-        ) {
-            // event is web socket event from api gateway v2
-            return this.wsHandler(event as APIGatewayWebSocketEvent, context);
+            if (
+                (event as APIGatewayWebSocketEvent).requestContext != null &&
+                (event as APIGatewayWebSocketEvent).requestContext.routeKey != null
+            ) {
+                // event is web socket event from api gateway v2
+                return this.wsHandler(event, context);
+            }
+            
+            throw new Error('Invalid event');
         }
-        
-        throw new Error('Invalid event');
-        
             
     }
 
