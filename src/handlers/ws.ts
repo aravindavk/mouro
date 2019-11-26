@@ -17,10 +17,20 @@ export class WSHandler {
 
         const schema = this.schemaMgr.getSchema();
 
+        const onConnect = async (headers:any) =>{
+            console.log("onConnect: headers");
+            console.log(headers);
+            //const authData=await authMgr.getAuthData(headers);
+            //console.log(authData);
+            //return {authData};
+            return {};
+        }
+
         this.wsHandler = createWsHandler({
             connectionManager,
             schema,
             subscriptionManager,
+            onConnect,
         });
     }
 
