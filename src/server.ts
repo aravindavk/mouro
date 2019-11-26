@@ -1,3 +1,6 @@
+import Debug from 'debug'
+const debug = Debug('mouro:server')
+
 //Load Mgrs
 import {DidResolverMgr} from './lib/didResolverMgr';
 import {AuthMgr} from './lib/authMgr';
@@ -32,10 +35,9 @@ const server = new ApolloServer({
   graphqlPath:'/graphql',
   subscriptions: {
     onConnect: async (headers:any, webSocket:any) => {
-      console.log("onConnect: headers");
-      console.log(headers);
+      debug("onConnect: %O",headers);
       const authData=await authMgr.getAuthData(headers);
-      console.log(authData);
+      debug("authData: %O",authData);
       return {authData};
     }
   }

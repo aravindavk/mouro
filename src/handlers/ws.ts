@@ -1,3 +1,6 @@
+import Debug from 'debug'
+const debug = Debug('mouro:WSHandler')
+
 import { Context, APIGatewayProxyResult } from 'aws-lambda';
 import { APIGatewayWebSocketEvent,createWsHandler, DynamoDBSubscriptionManager, DynamoDBConnectionManager, APIGatewayV2Handler} from 'aws-lambda-graphql';
 import { SchemaMgr } from '../lib/schemaMgr';
@@ -18,10 +21,9 @@ export class WSHandler {
         const schema = this.schemaMgr.getSchema();
 
         const onConnect = async (headers:any) =>{
-            console.log("onConnect: headers");
-            console.log(headers);
+            debug("onConnect headers: %j",headers);
             //const authData=await authMgr.getAuthData(headers);
-            //console.log(authData);
+            //debug("onConnect authData: %j",authData);
             //return {authData};
             return {};
         }
@@ -36,9 +38,8 @@ export class WSHandler {
 
     getHandler(){
         return async (event: APIGatewayWebSocketEvent, context: Context): Promise<void |APIGatewayProxyResult> => {
-            console.log("WEB SOCKET EVENT")
-            console.log(event)
-            console.log(context)
+            debug("handle event: %j",event)
+            debug("handle context: %j",context)
 
             if (
                 (event as APIGatewayWebSocketEvent).requestContext != null &&
