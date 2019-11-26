@@ -32,6 +32,9 @@ export class WSHandler {
                 (event as APIGatewayWebSocketEvent).requestContext.routeKey != null
             ) {
                 // event is web socket event from api gateway v2
+                console.log("WEB SOCKET EVENT")
+                console.log(event)
+                console.log(context)
                 return this.wsHandler(event, context);
             }
             
