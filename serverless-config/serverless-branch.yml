@@ -12,7 +12,7 @@ provider:
   environment:
     PG_URL: ${ssm:/mouro/develop/PG_URL~true}
     INFURA_PROJECT_ID: ${ssm:/mouro/develop/INFURA_PROJECT_ID~true}
-    DEBUG: *
+    DEBUG: "*"
   iamRoleStatements: ${file(serverless-config/iam-roles.yml)}
 
 custom: 
