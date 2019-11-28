@@ -1,5 +1,5 @@
 import Debug from 'debug'
-const debug = Debug('mouro:sqliteMgr')
+const debug = Debug('mouro:SQLiteMgr')
 
 import { PersistedEdgeType, StorageInterface } from "./storageMgr";
 import { AuthDataType, AuthzConditionType } from "./authMgr";

@@ -4,29 +4,28 @@ const debug = Debug('mouro:WSHandler')
 import { Context, APIGatewayProxyResult } from 'aws-lambda';
 import { APIGatewayWebSocketEvent,createWsHandler, DynamoDBSubscriptionManager, DynamoDBConnectionManager, APIGatewayV2Handler} from 'aws-lambda-graphql';
 import { SchemaMgr } from '../lib/schemaMgr';
+import { AuthMgr } from '../lib/authMgr';
 
 export class WSHandler {
     
     wsHandler: APIGatewayV2Handler;
-    schemaMgr: SchemaMgr;
 
-    constructor (schemaMgr: SchemaMgr) {
-        this.schemaMgr=schemaMgr;
+    constructor (schemaMgr: SchemaMgr,authMgr: AuthMgr) {
         
         const subscriptionManager = new DynamoDBSubscriptionManager();
         const connectionManager = new DynamoDBConnectionManager({
             subscriptions: subscriptionManager,
         });
 
-        const schema = this.schemaMgr.getSchema();
+        const schema = schemaMgr.getSchema();
 
-        const onConnect = async (headers:any) =>{
-            debug("onConnect headers: %j",headers);
-            //const authData=await authMgr.getAuthData(headers);
-            //debug("onConnect authData: %j",authData);
-            //return {authData};
-            return {};
-        }
+        const onConnect = async (headers:any) => {
+            debug("onConnect: %O",headers);
+            const authData=await authMgr.getAuthData(headers);
+            debug("authData: %O",authData);
+            return {authData};
+          }
+      
 
         this.wsHandler = createWsHandler({
             connectionManager,

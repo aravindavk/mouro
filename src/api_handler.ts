@@ -22,7 +22,7 @@ import {WSHandler} from "./handlers/ws";
 
 //Instanciate handlers
 const graphqlHandler = (new GraphQLHandler(schemaMgr)).getHandler()
-const wsHandler = (new WSHandler(schemaMgr)).getHandler()
+const wsHandler = (new WSHandler(schemaMgr,authMgr)).getHandler()
 
 //Exports for serverless
 exports.graphql = graphqlHandler;

@@ -34,7 +34,7 @@ const server = new ApolloServer({
   introspection: true,
   graphqlPath:'/graphql',
   subscriptions: {
-    onConnect: async (headers:any, webSocket:any) => {
+    onConnect: async (headers:any) => {
       debug("onConnect: %O",headers);
       const authData=await authMgr.getAuthData(headers);
       debug("authData: %O",authData);
