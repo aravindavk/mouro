@@ -47,7 +47,7 @@ export class EdgeResolverMgr {
             hash: hash,
             jwt: edgeJWT,
             from: pl.iss,
-            to:   pl.sub,
+            to:   pl.sub || pl.aud,
             type:  pl.type,
             time: pl.iat,
             visibility: this.visToVisibility(pl.vis),
