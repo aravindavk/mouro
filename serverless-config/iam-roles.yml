@@ -21,3 +21,7 @@
     - dynamodb:GetItem
     - dynamodb:PutItem
   Resource: !GetAtt SubscriptionOperationsDynamoDBTable.Arn
+- Effect: Allow
+  Action:
+    - dynamodb:PutItem
+  Resource: !GetAtt EventsDynamoDBTable.Arn

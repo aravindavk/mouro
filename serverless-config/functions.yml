@@ -15,3 +15,8 @@ wsHandler:
       - websocket: 
          route: $disconnect
       - websocket: $default
+      - stream:
+          type: dynamodb
+          arn:
+            Fn::GetAtt: [ EventsDynamoDBTable, StreamArn ]
+

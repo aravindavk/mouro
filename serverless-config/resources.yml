@@ -43,3 +43,19 @@ Resources:
       KeySchema:
         - AttributeName: subscriptionId
           KeyType: HASH
+
+  EventsDynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      # see DynamoDBEventStore
+      TableName: Events
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+      # see ISubscriptionEvent
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      StreamSpecification:
+        StreamViewType: NEW_IMAGE
