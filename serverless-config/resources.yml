@@ -4,7 +4,7 @@ Resources:
     Type: AWS::DynamoDB::Table
     Properties:
       # see DynamoDBConnectionManager
-      TableName: Connections
+      TableName: Connections-${opt:stage}
       AttributeDefinitions:
         - AttributeName: id
           AttributeType: S
@@ -18,7 +18,7 @@ Resources:
     Type: AWS::DynamoDB::Table
     Properties:
       # see DynamoDBSubscriptionManager
-      TableName: Subscriptions
+      TableName: Subscriptions-${opt:stage}
       AttributeDefinitions:
         - AttributeName: event
           AttributeType: S
@@ -35,7 +35,7 @@ Resources:
     Type: AWS::DynamoDB::Table
     Properties:
       # see DynamoDBSubscriptionManager
-      TableName: SubscriptionOperations
+      TableName: SubscriptionOperations-${opt:stage}
       AttributeDefinitions:
         - AttributeName: subscriptionId
           AttributeType: S
