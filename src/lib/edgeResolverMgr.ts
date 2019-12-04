@@ -1,3 +1,6 @@
+import Debug from 'debug'
+const debug = Debug('mouro:SchemaMgr')
+
 const blake = require('blakejs')
 
 import { StorageMgr, PersistedEdgeType } from "./storageMgr";
@@ -15,11 +18,11 @@ export class EdgeResolverMgr {
     }
 
     async addEdge(edgeJWT: string){
-        console.log("edgeJWT:"+edgeJWT);
+        debug("addEdge edgeJWT: %O",edgeJWT);
         
         //blake2b hash of the original message
         const hash = blake.blake2bHex(edgeJWT)
-        console.log("hash:"+hash);
+        debug("addEdge hash: %O",hash);
 
         
         //Verify that the body is a proper JWT
@@ -28,18 +31,17 @@ export class EdgeResolverMgr {
         }
 
         //Verify audience to the recipient aud (yes is kind of a hack..)
-        console.log("decodeJWT...")
         const decodedJWT = didJWT.decodeJWT(edgeJWT)
-        console.log(decodedJWT)
+        debug("addEdge decodedJWT: %O",decodedJWT)
         
         if(decodedJWT.payload.aud){
             verifyOptions.audience=decodedJWT.payload.aud
         }
         
         //This can take up to 3 sec
-        console.log("verifyJWT...")
+        debug("addEdge verifyJWT...")
         const verifiedJWT = await didJWT.verifyJWT(edgeJWT,verifyOptions);
-        console.log(verifiedJWT);
+        debug("addEdge verifiedJWT: %O",decodedJWT)
 
         const pl=verifiedJWT.payload;
 
@@ -55,8 +57,7 @@ export class EdgeResolverMgr {
             tag:  pl.tag,
             data: pl.data
         }
-        console.log("edge decoded")
-        console.log(edgeObject);
+        debug("addEdge edgeObject: %O",edgeObject)
 
         //Persist edge
         await this.storageMgr.addEdge(edgeObject);
@@ -65,6 +66,9 @@ export class EdgeResolverMgr {
         let ret:any=edgeObject;
         ret.from={ did: ret.from }
         ret.to={did: ret.to}
+        
+        
+        debug("addEdge ret: %O",ret)
         return ret;
     }
 
