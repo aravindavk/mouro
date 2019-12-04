@@ -35,19 +35,19 @@ export class SchemaMgr {
             Query: {
                 //Return identity for the API token issuer
                 me: async (parent: any, args: any, context: any, info: any) => {
-                    debug("Query.me: %O %O %O %O",parent,args,context,info)
+                    debug("Query.me: %j %j %j %j",parent,args,context,info)
                     const res=await this.queryResolverMgr.me(context.headers)
                     return res
                 },
                 // Return an edge by hash
                 edgeByHash: async (parent: any, args: any, context: any, info: any) => {
-                    debug("Query.edgeByHash: %O %O %O %O",parent,args,context,info)
+                    debug("Query.edgeByHash: %j %j %j %j",parent,args,context,info)
                     const res=await this.queryResolverMgr.edgeByHash(context.headers,args.hash)
                     return res
                 },
                 //Find edges
                 findEdges: async (parent: any, args: any, context: any, info: any) => {
-                    debug("Query.findEdges: %O %O %O %O",parent,args,context,info)
+                    debug("Query.findEdges: %j %j %j %j",parent,args,context,info)
                     const res=await this.queryResolverMgr.findEdges(context.headers,args)
                     return res
                 },
@@ -59,7 +59,7 @@ export class SchemaMgr {
             },
             Mutation: {
                 addEdge: async (parent: any, args: any, context: any, info: any) => {
-                    debug("Mutation.addEdge: %O %O %O %O",parent,args,context,info)
+                    debug("Mutation.addEdge: %j %j %j %j",parent,args,context,info)
                     const res=await this.edgeResolverMgr.addEdge(args.edgeJWT)
                     pubSub.publish('EDGE_ADDED', { edgeAdded: res });
                     return res
@@ -68,15 +68,15 @@ export class SchemaMgr {
             Subscription: {
                 edgeAdded:{
                     resolve: (rootValue: any) => {
-                        debug("Subscription.edgeAdded.resolve: %O",rootValue)
+                        debug("Subscription.edgeAdded.resolve: %j",rootValue)
                         return rootValue;
                     },
                     subscribe: withFilter(
                         pubSub.subscribe('EDGE_ADDED'),
                         (rootValue, args, context) => {
-                            debug("Subscription.edgeAdded.subscribe rootValue: %O",rootValue)
-                            debug("Subscription.edgeAdded.subscribe args: %O",args)
-                            debug("Subscription.edgeAdded.subscribe context: %O",context)
+                            debug("Subscription.edgeAdded.subscribe rootValue: %j",rootValue)
+                            debug("Subscription.edgeAdded.subscribe args: %j",args)
+                            debug("Subscription.edgeAdded.subscribe context: %j",context)
 
                             return true;
                             

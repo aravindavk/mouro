@@ -21,9 +21,9 @@ export class WSHandler {
         const schema = schemaMgr.getSchema();
 
         const onConnect = async (headers:any) => {
-            debug("onConnect: %O",headers);
+            debug("onConnect: %j",headers);
             const authData=await authMgr.getAuthData(headers);
-            debug("authData: %O",authData);
+            debug("authData: %j",authData);
             return {authData};
           }
       
