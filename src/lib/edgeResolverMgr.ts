@@ -1,5 +1,5 @@
 import Debug from 'debug'
-const debug = Debug('mouro:SchemaMgr')
+const debug = Debug('mouro:EdgeResolverMgr')
 
 const blake = require('blakejs')
 
