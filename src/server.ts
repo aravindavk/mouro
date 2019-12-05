@@ -51,6 +51,10 @@ const http = require('http');
 const httpServer = http.createServer(app);
 server.installSubscriptionHandlers(httpServer);
 
+//Healthcheck
+app.get('/health', function (req, res) {
+  res.send('OK')
+})
 
 const PORT = process.env.PORT || 3000;
 
