@@ -123,6 +123,9 @@ jobs:
           command: npm run build
       - setup_remote_docker
       - run:
+          name: docker-login 
+          command: echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+      - run:
           name: create-docker-image
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
