@@ -65,12 +65,7 @@ export class SchemaMgr {
                   subscribe: withFilter(
                     () => pubsub.asyncIterator('EDGE_ADDED'),
                     (payload, args,context) => {
-                      console.log("PAYLOAD")
-                      console.log(payload)
-                      console.log("ARGS")
-                      console.log(args)
-                      console.log("CONTEXT")
-                      console.log(context)
+                      debug("Subscription.edgeAdded.subscribe: %j %j %j %j",payload,args,context)
   
                       const edge=payload.edgeAdded;
                       const authData=context.authData;
@@ -81,7 +76,8 @@ export class SchemaMgr {
                       if(edge.visibility=='TO' && edge.to.did==authData.user) isAllowed=true;
                       if(edge.visibility=='BOTH' && 
                             (edge.to.did==authData.user || edge.from.did==authData.user)) isAllowed=true;
-                      console.log("isAllowed: "+isAllowed);
+                    
+                      debug("Subscription.edgeAdded.subscribe isAllowed: %j",isAllowed);
 
                       //Args filters
                       const inFromDID=((!args.fromDID) || (args.fromDID && args.fromDID.indexOf(edge.from.did)>=0))
