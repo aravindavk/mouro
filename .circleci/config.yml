@@ -108,6 +108,35 @@ jobs:
           root: ~/repo
           paths:
             - env.json
+
+
+  # deploy docker version
+  docker:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:8.10
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run: 
+          name: build
+          command: npm run build
+      - run:
+          name: create-docker-image
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              docker build -t uport/mouro:latest
+            else
+              docker build -t uport/mouro:`echo ${CIRCLE_BRANCH} | sed 's/\//-/g'`
+            fi
+      - run:
+          name: push-to-dockerhub
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              docker push uport/mouro:latest
+            else
+              docker push uport/mouro:`echo ${CIRCLE_BRANCH} | sed 's/\//-/g'`
+            fi
   
   # Run e2e tests
   e2e-tests:
