@@ -176,6 +176,9 @@ workflows:
       - deploy:
           requires:
             - checkout-setup
+      - docker:
+          requires:
+            - checkout-setup
       - e2e-tests:
           requires:
             - deploy
