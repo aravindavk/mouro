@@ -142,7 +142,12 @@ jobs:
           at: ~/repo
       - run: 
           name: create-cf-config
-          command:  AWS_REGION=us-west-2 node dev-scripts/create-cf-config.js ws-non-lambda > mouro-cf.json
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              AWS_REGION=us-west-2 node dev-scripts/create-cf-config master > mouro-cf.json
+            else
+              AWS_REGION=us-west-2 node dev-scripts/create-cf-config `echo ${CIRCLE_BRANCH} | sed 's/\//-/g'` > mouro-cf.json
+            fi
       - run:
           name: update-cf-stack
           command: AWS_REGION=us-west-2 ./node_modules/.bin/aws-cfn update --config-file ./mouro-cf.json
