@@ -37,7 +37,7 @@ const server = new ApolloServer({
     onConnect: async (headers:any) => {
       debug("onConnect: %j",headers);
       const authData=await authMgr.getAuthData(headers);
-      debug("authData: %j",authData);
+      debug("onConnect authData: %j",authData);
       return {authData};
     }
   }

@@ -95,14 +95,6 @@ jobs:
             else
               node dev-scripts/create-newman-env https://edge.uport.space/`echo ${CIRCLE_BRANCH} | sed 's/\//-/g'` > env.json
             fi
-      - run: 
-          name: report-deployment
-          command: |
-            if [ "${CIRCLE_BRANCH}" != "master" ]; then
-              export STORY_ID=`echo ${CIRCLE_BRANCH} | cut -d "-" -f 2`
-              export DEPLOYMENT_LINK=https://edge.uport.space/`echo ${CIRCLE_BRANCH} | sed 's/\//-/g'` 
-              curl -X POST https://api.uport.me/pt-webhook/deployments -d  "{\"storyId\":${STORY_ID}, \"deploymentLink\":\"${DEPLOYMENT_LINK}\"}"
-            fi
       # Persist env.json
       - persist_to_workspace:
           root: ~/repo
@@ -141,7 +133,23 @@ jobs:
             else
               docker push uport/mouro:`echo ${CIRCLE_BRANCH} | sed 's/\//-/g'`
             fi
-  
+  aws-ecs:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:8.10
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run: 
+          name: create-cf-config
+          command:  AWS_REGION=us-west-2 node dev-scripts/create-cf-config.js ws-non-lambda > mouro-cf.json
+      - run:
+          name: update-cf-stack
+          command: AWS_REGION=us-west-2 ./node_modules/.bin/aws-cfn update --config-file ./mouro-cf.json
+      - run:
+          name: clean
+          command: rm -rf ./mouro-cf.json
+
   # Run e2e tests
   e2e-tests:
     working_directory: ~/repo
@@ -183,7 +191,11 @@ workflows:
       - docker:
           requires:
             - checkout-setup
+      - aws-ecs:
+          requires:
+            - docker
       - e2e-tests:
           requires:
             - deploy
+        
     
