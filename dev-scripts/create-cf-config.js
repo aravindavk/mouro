@@ -39,7 +39,7 @@ async function getSSMParameter(param){
 }
 
 
-const f=(async()=> {
+const f=(async() => {
     template.default.StackName="mouro-ecs-"+branch;
     template.default.Parameters.StageName=branch;
     template.default.Parameters.ServiceName="mouro-ecs-"+branch;

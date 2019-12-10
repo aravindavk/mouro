@@ -34,12 +34,12 @@ const server = new ApolloServer({
   introspection: true,
   schema,
   subscriptions: {
-    onConnect: async (headers:any) => {
+    onConnect: async(headers: any) => {
       debug("onConnect: %j",headers);
       const authData=await authMgr.getAuthData(headers);
       debug("onConnect authData: %j",authData);
       return {authData};
-    }
+    },
   },
 });
 

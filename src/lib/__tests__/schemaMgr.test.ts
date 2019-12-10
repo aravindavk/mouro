@@ -35,7 +35,7 @@ describe('SchemaMgr', () => {
             mockQueryResolverMgr.me=jest.fn().mockImplementationOnce((h)=>{return h})
             const me = sut._getResolvers()['Query'].me;
             me({},{},{headers: 'head'},{})
-            .then((res:any)=>{
+            .then((res: any)=>{
                 expect(res).toEqual('head');
                 expect(mockQueryResolverMgr.me).toBeCalledWith('head')
                 done();
@@ -46,7 +46,7 @@ describe('SchemaMgr', () => {
             mockQueryResolverMgr.edgeByHash=jest.fn().mockImplementationOnce((h,hs)=>{return [h,hs]})
             const edgeByHash = sut._getResolvers()['Query'].edgeByHash;
             edgeByHash({},{hash: 'hash'},{headers: 'head'},{})
-            .then((res:any)=>{
+            .then((res: any)=>{
                 expect(res).toEqual(['head','hash']);
                 expect(mockQueryResolverMgr.edgeByHash).toBeCalledWith('head','hash')
                 done();
@@ -57,7 +57,7 @@ describe('SchemaMgr', () => {
             mockQueryResolverMgr.findEdges=jest.fn().mockImplementationOnce((h,args)=>{return [h,args]})
             const findEdges = sut._getResolvers()['Query'].findEdges;
             findEdges({},'args',{headers: 'head'},{})
-            .then((res:any)=>{
+            .then((res: any)=>{
                 expect(res).toEqual(['head','args']);
                 expect(mockQueryResolverMgr.findEdges).toBeCalledWith('head','args')
                 done();
@@ -68,7 +68,7 @@ describe('SchemaMgr', () => {
             mockEdgeResolverMgr.addEdge=jest.fn().mockImplementationOnce((e)=>{return [e]})
             const addEdge = sut._getResolvers()['Mutation'].addEdge;
             addEdge({},{edgeJWT: 'edge'},{},{})
-            .then((res:any)=>{
+            .then((res: any)=>{
                 expect(res).toEqual(['edge']);
                 expect(mockEdgeResolverMgr.addEdge).toBeCalledWith('edge')
                 done();
@@ -87,7 +87,7 @@ describe('SchemaMgr', () => {
                 
                 resolvers['Mutation'].addEdge({},{edgeJWT: 'edge'},{},{})
                 .then(()=>{ return subscribe.next() })
-                .then((result:any)=>{
+                .then((result: any)=>{
                     expect(result.value).toEqual({edgeAdded: edge});
                     done();
                 })
@@ -103,7 +103,7 @@ describe('SchemaMgr', () => {
                 
                 resolvers['Mutation'].addEdge({},{edgeJWT: 'edge'},{},{})
                 .then(()=>{ return subscribe.next() })
-                .then((result:any)=>{
+                .then((result: any)=>{
                     expect(result.value).toEqual({edgeAdded: edge});
                     done();
                 })
@@ -119,7 +119,7 @@ describe('SchemaMgr', () => {
                 
                 resolvers['Mutation'].addEdge({},{edgeJWT: 'edge'},{},{})
                 .then(()=>{ return subscribe.next() })
-                .then((result:any)=>{
+                .then((result: any)=>{
                     expect(result.value).toEqual({edgeAdded: edge});
                     done();
                 })
@@ -135,7 +135,7 @@ describe('SchemaMgr', () => {
                 
                 resolvers['Mutation'].addEdge({},{edgeJWT: 'edge'},{},{})
                 .then(()=>{ return subscribe.next() })
-                .then((result:any)=>{
+                .then((result: any)=>{
                     expect(result.value).toEqual({edgeAdded: edge});
                     done();
                 })
@@ -152,7 +152,7 @@ describe('SchemaMgr', () => {
                 
                 resolvers['Mutation'].addEdge({},{edgeJWT: 'edge'},{},{})
                 .then(()=>{ return subscribe.next() })
-                .then((result:any)=>{
+                .then((result: any)=>{
                     expect(result.value).toEqual({edgeAdded: edge});
                     done();
                 })
@@ -168,7 +168,7 @@ describe('SchemaMgr', () => {
                 
                 resolvers['Mutation'].addEdge({},{edgeJWT: 'edge'},{},{})
                 .then(()=>{ return subscribe.next() })
-                .then((result:any)=>{
+                .then((result: any)=>{
                     expect(result.value).toEqual({edgeAdded: edge});
                     done();
                 })
