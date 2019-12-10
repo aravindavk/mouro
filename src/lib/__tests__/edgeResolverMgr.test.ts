@@ -39,7 +39,6 @@ describe('EdgeResolverMgr', () => {
         .then((token: string)=>{
             validToken=token;
             const payloadAud={
-                sub: did,
                 type: 'ALL',
                 tag: 'test',
                 data: 'somedata',
@@ -89,7 +88,7 @@ describe('EdgeResolverMgr', () => {
         
         test('aud field', (done)=>{
             didJWT.decodeJWT.mockReturnValue({payload: {aud: aud}})
-            didJWT.verifyJWT.mockResolvedValueOnce({payload: {iss: did, sub: sub, aud: aud}})
+            didJWT.verifyJWT.mockResolvedValueOnce({payload: {iss: did, aud: aud}})
             sut.addEdge(validTokenAud)
             .then((resp: any)=> {
                 expect(resp).not.toBeNull();

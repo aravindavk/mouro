@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/uport-project/mouro#readme",
   "devDependencies": {
+    "aws-cloudformation-simple-cli": "^1.1.1",
     "aws-lambda": "^0.1.2",
     "aws-sdk-mock": "^4.3.1",
     "jest": "^24.8.0",
@@ -35,12 +36,14 @@
     "uport-credentials": "^1.1.4"
   },
   "dependencies": {
+    "@types/debug": "^4.1.5",
     "@types/express": "^4.17.0",
     "@types/graphql": "^14.2.0",
     "@types/jest": "^24.0.12",
     "apollo-server-express": "^2.8.1",
     "apollo-server-lambda": "^2.3.1",
     "blakejs": "^1.1.0",
+    "debug": "^4.1.1",
     "did-jwt": "^3.0.0",
     "did-resolver": "^1.1.0",
     "ethr-did-resolver": "^1.0.3",

@@ -76,3 +76,5 @@ serverless.yml
 
 .build/
 mouro.sqlite
+
+mouro-cf.json

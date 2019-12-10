@@ -1,3 +1,6 @@
+import Debug from 'debug'
+const debug = Debug('mouro:PgMgr')
+
 import { PersistedEdgeType, StorageInterface } from "./storageMgr";
 import { AuthDataType, AuthzConditionType } from "./authMgr";
 const { Client } = require('pg')
@@ -6,7 +9,7 @@ const sql = require('sql-bricks-postgres');
 module.exports = class PgMgr implements StorageInterface{
 
   constructor() {
-    console.log("Pg Driver Started.")
+    debug("Pg Driver Started.")
   }
 
   _getClient(){
@@ -96,7 +99,7 @@ module.exports = class PgMgr implements StorageInterface{
     whereClause = sql.and(whereClause,this._getPermsReadWhere(authData))
     
     const q=sql.select().from('edges').where(whereClause).toString();
-    console.log(q);
+    debug("getEdge query: %s",q);
     
     const client = this._getClient();
     try {
@@ -113,6 +116,7 @@ module.exports = class PgMgr implements StorageInterface{
   async findEdges(args: any, authData: AuthDataType | null){
     //find edges
     let where={};
+    debug("findEdges args: %j",args)
     
     if(args.fromDID) where=sql.and(where,sql.in('from',args.fromDID))
     if(args.toDID)   where=sql.and(where,sql.in('to'  ,args.toDID))
@@ -127,7 +131,7 @@ module.exports = class PgMgr implements StorageInterface{
       .where(where)
       .orderBy('time')
       .toString();
-    console.log(q);
+      debug("findEdges query: %s",q);
 
     const client = this._getClient();
     try {

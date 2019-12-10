@@ -95,20 +95,66 @@ jobs:
             else
               node dev-scripts/create-newman-env https://edge.uport.space/`echo ${CIRCLE_BRANCH} | sed 's/\//-/g'` > env.json
             fi
-      - run: 
-          name: report-deployment
-          command: |
-            if [ "${CIRCLE_BRANCH}" != "master" ]; then
-              export STORY_ID=`echo ${CIRCLE_BRANCH} | cut -d "-" -f 2`
-              export DEPLOYMENT_LINK=https://edge.uport.space/`echo ${CIRCLE_BRANCH} | sed 's/\//-/g'` 
-              curl -X POST https://api.uport.me/pt-webhook/deployments -d  "{\"storyId\":${STORY_ID}, \"deploymentLink\":\"${DEPLOYMENT_LINK}\"}"
-            fi
       # Persist env.json
       - persist_to_workspace:
           root: ~/repo
           paths:
             - env.json
-  
+
+
+  # deploy docker version
+  docker:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:8.10
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run: 
+          name: build
+          command: npm run build
+      - setup_remote_docker
+      - run:
+          name: docker-login 
+          command: echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+      - run:
+          name: create-docker-image
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              docker build -t uport/mouro:latest .
+            else
+              docker build -t uport/mouro:`echo ${CIRCLE_BRANCH} | sed 's/\//-/g'` .
+            fi
+      - run:
+          name: push-to-dockerhub
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              docker push uport/mouro:latest
+            else
+              docker push uport/mouro:`echo ${CIRCLE_BRANCH} | sed 's/\//-/g'`
+            fi
+  aws-ecs:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:8.10
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run: 
+          name: create-cf-config
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              AWS_REGION=us-west-2 node dev-scripts/create-cf-config master > mouro-cf.json
+            else
+              AWS_REGION=us-west-2 node dev-scripts/create-cf-config `echo ${CIRCLE_BRANCH} | sed 's/\//-/g'` > mouro-cf.json
+            fi
+      - run:
+          name: update-cf-stack
+          command: AWS_REGION=us-west-2 ./node_modules/.bin/aws-cfn update --config-file ./mouro-cf.json
+      - run:
+          name: clean
+          command: rm -rf ./mouro-cf.json
+
   # Run e2e tests
   e2e-tests:
     working_directory: ~/repo
@@ -147,7 +193,14 @@ workflows:
       - deploy:
           requires:
             - checkout-setup
+      - docker:
+          requires:
+            - checkout-setup
+      - aws-ecs:
+          requires:
+            - docker
       - e2e-tests:
           requires:
             - deploy
+        
     
