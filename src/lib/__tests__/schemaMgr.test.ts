@@ -75,6 +75,140 @@ describe('SchemaMgr', () => {
             })
         })
 
+        describe('Subscription.edgeAdded',()=>{
+
+            test('visibility: ANY',(done)=>{
+                const edge={ visibility: 'ANY'}
+                mockEdgeResolverMgr.addEdge=jest.fn().mockImplementationOnce((e)=>{return edge})
+    
+                const resolvers= sut._getResolvers();
+                const edgeAdded =resolvers['Subscription'].edgeAdded;
+                const subscribe=edgeAdded.subscribe({},{},{},{})
+                
+                resolvers['Mutation'].addEdge({},{edgeJWT: 'edge'},{},{})
+                .then(()=>{ return subscribe.next() })
+                .then((result:any)=>{
+                    expect(result.value).toEqual({edgeAdded: edge});
+                    done();
+                })
+            })
+
+            test('visibility: TO',(done)=>{
+                const edge={ visibility: 'TO', to: {did: 'did:test'}}
+                mockEdgeResolverMgr.addEdge=jest.fn().mockImplementationOnce((e)=>{return edge})
+    
+                const resolvers= sut._getResolvers();
+                const edgeAdded =resolvers['Subscription'].edgeAdded;
+                const subscribe=edgeAdded.subscribe({},{},{authData: {user: 'did:test'}},{})
+                
+                resolvers['Mutation'].addEdge({},{edgeJWT: 'edge'},{},{})
+                .then(()=>{ return subscribe.next() })
+                .then((result:any)=>{
+                    expect(result.value).toEqual({edgeAdded: edge});
+                    done();
+                })
+            })
+
+            test('visibility: BOTH (to)',(done)=>{
+                const edge={ visibility: 'BOTH', to: {did: 'did:testTo'}}
+                mockEdgeResolverMgr.addEdge=jest.fn().mockImplementationOnce((e)=>{return edge})
+    
+                const resolvers= sut._getResolvers();
+                const edgeAdded =resolvers['Subscription'].edgeAdded;
+                const subscribe=edgeAdded.subscribe({},{},{authData: {user: 'did:testTo'}},{})
+                
+                resolvers['Mutation'].addEdge({},{edgeJWT: 'edge'},{},{})
+                .then(()=>{ return subscribe.next() })
+                .then((result:any)=>{
+                    expect(result.value).toEqual({edgeAdded: edge});
+                    done();
+                })
+            })
+
+            test('visibility: BOTH (from)',(done)=>{
+                const edge={ visibility: 'BOTH', to: {did: 'did:testTo'}, from: {did: 'did:testFrom'}}
+                mockEdgeResolverMgr.addEdge=jest.fn().mockImplementationOnce((e)=>{return edge})
+    
+                const resolvers= sut._getResolvers();
+                const edgeAdded =resolvers['Subscription'].edgeAdded;
+                const subscribe=edgeAdded.subscribe({},{},{authData: {user: 'did:testFrom'}},{})
+                
+                resolvers['Mutation'].addEdge({},{edgeJWT: 'edge'},{},{})
+                .then(()=>{ return subscribe.next() })
+                .then((result:any)=>{
+                    expect(result.value).toEqual({edgeAdded: edge});
+                    done();
+                })
+            })
+
+
+            test('filter fromDID',(done)=>{
+                const edge={ visibility: 'ANY',  from: {did: 'did:testFrom'}}
+                mockEdgeResolverMgr.addEdge=jest.fn().mockImplementationOnce((e)=>{return edge})
+    
+                const resolvers= sut._getResolvers();
+                const edgeAdded =resolvers['Subscription'].edgeAdded;
+                const subscribe=edgeAdded.subscribe({},{fromDID:'did:testFrom'},{},{})
+                
+                resolvers['Mutation'].addEdge({},{edgeJWT: 'edge'},{},{})
+                .then(()=>{ return subscribe.next() })
+                .then((result:any)=>{
+                    expect(result.value).toEqual({edgeAdded: edge});
+                    done();
+                })
+            })
+
+            test('filter toDID',(done)=>{
+                const edge={ visibility: 'ANY',  to: {did: 'did:testTo'}}
+                mockEdgeResolverMgr.addEdge=jest.fn().mockImplementationOnce((e)=>{return edge})
+    
+                const resolvers= sut._getResolvers();
+                const edgeAdded =resolvers['Subscription'].edgeAdded;
+                const subscribe=edgeAdded.subscribe({},{toDID:'did:testTo'},{},{})
+                
+                resolvers['Mutation'].addEdge({},{edgeJWT: 'edge'},{},{})
+                .then(()=>{ return subscribe.next() })
+                .then((result:any)=>{
+                    expect(result.value).toEqual({edgeAdded: edge});
+                    done();
+                })
+            })
+
+
+            test('filter type',(done)=>{
+                const edge={ visibility: 'ANY',  type: 'testType'}
+                mockEdgeResolverMgr.addEdge=jest.fn().mockImplementationOnce((e)=>{return edge})
+    
+                const resolvers= sut._getResolvers();
+                const edgeAdded =resolvers['Subscription'].edgeAdded;
+                const subscribe=edgeAdded.subscribe({},{type:'testType'},{},{})
+                
+                resolvers['Mutation'].addEdge({},{edgeJWT: 'edge'},{},{})
+                .then(()=>{ return subscribe.next() })
+                .then((result:any)=>{
+                    expect(result.value).toEqual({edgeAdded: edge});
+                    done();
+                })
+            })
+
+            test('filter tag',(done)=>{
+                const edge={ visibility: 'ANY',  tag: 'testTag'}
+                mockEdgeResolverMgr.addEdge=jest.fn().mockImplementationOnce((e)=>{return edge})
+    
+                const resolvers= sut._getResolvers();
+                const edgeAdded =resolvers['Subscription'].edgeAdded;
+                const subscribe=edgeAdded.subscribe({},{tag:'testTag'},{},{})
+                
+                resolvers['Mutation'].addEdge({},{edgeJWT: 'edge'},{},{})
+                .then(()=>{ return subscribe.next() })
+                .then((result:any)=>{
+                    expect(result.value).toEqual({edgeAdded: edge});
+                    done();
+                })
+            })
+
+        })
+
     })
 
     test('getSchema', ()=> {
