@@ -22,9 +22,9 @@ let template={
             "CAPABILITY_NAMED_IAM"
         ]
     }
-}
+};
 
-const branch=process.argv[2]
+const branch=process.argv[2];
 const serial=(new Date()).getTime();
 
 const ssmClient=new aws.SSM();
@@ -39,22 +39,22 @@ async function getSSMParameter(param){
 }
 
 
-const f=(async()=>{
+const f=(async()=> {
     template.default.StackName="mouro-ecs-"+branch;
     template.default.Parameters.StageName=branch;
     template.default.Parameters.ServiceName="mouro-ecs-"+branch;
     template.default.Parameters.EnvSerial=""+serial;
 
-    if(branch=="master"){
-        template.default.Parameters.VPC="vpc-0749b50b0cd756a06"
-        template.default.Parameters.SubnetA="subnet-0754c5a9c71160829"
-        template.default.Parameters.SubnetB="subnet-02cf5c1fd9c86a117"
-        template.default.Parameters.Certificate="arn:aws:acm:us-west-2:113196216558:certificate/b2c6974a-d0a9-4769-8963-628054f042a1"
-        template.default.Parameters.EnvPgUrl=await getSSMParameter("/mouro/master/PG_URL")
-        template.default.Parameters.EnvInfuraProjectId=await getSSMParameter("/mouro/master/INFURA_PROJECT_ID")
+    if(branch==="master"){
+        template.default.Parameters.VPC="vpc-0749b50b0cd756a06";
+        template.default.Parameters.SubnetA="subnet-0754c5a9c71160829";
+        template.default.Parameters.SubnetB="subnet-02cf5c1fd9c86a117";
+        template.default.Parameters.Certificate="arn:aws:acm:us-west-2:113196216558:certificate/b2c6974a-d0a9-4769-8963-628054f042a1";
+        template.default.Parameters.EnvPgUrl=await getSSMParameter("/mouro/master/PG_URL");
+        template.default.Parameters.EnvInfuraProjectId=await getSSMParameter("/mouro/master/INFURA_PROJECT_ID");
     }else{
-        template.default.Parameters.EnvPgUrl=await getSSMParameter("/mouro/develop/PG_URL")
-        template.default.Parameters.EnvInfuraProjectId=await getSSMParameter("/mouro/develop/INFURA_PROJECT_ID")
+        template.default.Parameters.EnvPgUrl=await getSSMParameter("/mouro/develop/PG_URL");
+        template.default.Parameters.EnvInfuraProjectId=await getSSMParameter("/mouro/develop/INFURA_PROJECT_ID");
     }
 
     //Env Vars

@@ -80,14 +80,14 @@ export class SchemaMgr {
                       debug("Subscription.edgeAdded.subscribe isAllowed: %j",isAllowed);
 
                       //Args filters
-                      const inFromDID=((!args.fromDID) || (args.fromDID && args.fromDID.indexOf(edge.from.did)>=0))
-                      const inToDID=((!args.toDID) || (args.toDID && args.toDID.indexOf(edge.to.did)>=0))
-                      const inType=((!args.type) || (args.type && args.type.indexOf(edge.type)>=0))
-                      const inTag=((!args.tag) || (args.tag && args.tag.indexOf(edge.tag)>=0))
+                      const inFromDID=((!args.fromDID) || (args.fromDID && args.fromDID.indexOf(edge.from.did)>= 0))
+                      const inToDID=((!args.toDID) || (args.toDID && args.toDID.indexOf(edge.to.did)>= 0))
+                      const inType=((!args.type) || (args.type && args.type.indexOf(edge.type)>= 0))
+                      const inTag=((!args.tag) || (args.tag && args.tag.indexOf(edge.tag)>= 0))
                       
                       return isAllowed && inFromDID && inToDID && inType && inTag ;
                     }
-                  )
+                  ),
                 }
               }
         };

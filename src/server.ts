@@ -20,8 +20,7 @@ let schemaMgr = new SchemaMgr(queryResolverMgr,edgeResolverMgr);
 const { ApolloServer } = require('apollo-server-express');
 const schema = schemaMgr.getSchema()
 const server = new ApolloServer({
-  schema,
-  context: async (p:any) => {
+  context: async (p: any) => {
     //https://www.apollographql.com/docs/apollo-server/features/subscriptions/#context-with-subscriptions
     if (p.connection) {
       return p.connection.context;
@@ -31,8 +30,9 @@ const server = new ApolloServer({
       });
     }
   },
-  introspection: true,
   graphqlPath:'/graphql',
+  introspection: true,
+  schema,
   subscriptions: {
     onConnect: async (headers:any) => {
       debug("onConnect: %j",headers);
@@ -40,7 +40,7 @@ const server = new ApolloServer({
       debug("onConnect authData: %j",authData);
       return {authData};
     }
-  }
+  },
 });
 
 import express from "express";
@@ -52,7 +52,7 @@ const httpServer = http.createServer(app);
 server.installSubscriptionHandlers(httpServer);
 
 //Healthcheck
-app.get('/health', function (req, res) {
+app.get('/health', (req: any,res: any) => {
   res.send('OK')
 })
 

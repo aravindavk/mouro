@@ -185,7 +185,7 @@ describe('SchemaMgr', () => {
                 
                 resolvers['Mutation'].addEdge({},{edgeJWT: 'edge'},{},{})
                 .then(()=>{ return subscribe.next() })
-                .then((result:any)=>{
+                .then((result: any)=>{
                     expect(result.value).toEqual({edgeAdded: edge});
                     done();
                 })
@@ -201,7 +201,7 @@ describe('SchemaMgr', () => {
                 
                 resolvers['Mutation'].addEdge({},{edgeJWT: 'edge'},{},{})
                 .then(()=>{ return subscribe.next() })
-                .then((result:any)=>{
+                .then((result: any)=>{
                     expect(result.value).toEqual({edgeAdded: edge});
                     done();
                 })

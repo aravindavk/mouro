@@ -1,8 +1,6 @@
 FROM node:8
 LABEL MAINTAINER Andres Junge <andres.junge@consensys.net>
 
-USER root
-
 # Create app directory
 RUN mkdir -p /usr/src/app
 # Bundle app source
