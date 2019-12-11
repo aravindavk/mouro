@@ -121,7 +121,8 @@ jobs:
           name: create-docker-image
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              docker build -t uport/mouro:latest .
+              docker build -t uport/mouro:master .
+              docker tag uport/mouro:master uport/mouro:latest
             else
               docker build -t uport/mouro:`echo ${CIRCLE_BRANCH} | sed 's/\//-/g'` .
             fi
@@ -129,6 +130,7 @@ jobs:
           name: push-to-dockerhub
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              docker push uport/mouro:master
               docker push uport/mouro:latest
             else
               docker push uport/mouro:`echo ${CIRCLE_BRANCH} | sed 's/\//-/g'`
