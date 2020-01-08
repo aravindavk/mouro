@@ -1,13 +1,16 @@
 import {SchemaMgr} from '../schemaMgr';
-import { GraphQLSchema, Kind } from 'graphql';
+import { GraphQLSchema } from 'graphql';
+import { PubSub } from 'graphql-subscriptions';
 import { QueryResolverMgr } from '../queryResolverMgr';
 import { EdgeResolverMgr } from '../edgeResolverMgr';
+import { PubSubMgr } from '../pubSubMgr';
 import { AuthMgr } from '../authMgr';
 import { StorageMgr } from '../storageMgr';
 import { DidResolverMgr } from '../didResolverMgr';
 
 jest.mock('../queryResolverMgr')
 jest.mock('../edgeResolverMgr')
+jest.mock('../pubSubMgr')
 jest.mock('../storageMgr')
 
 describe('SchemaMgr', () => {
@@ -18,10 +21,13 @@ describe('SchemaMgr', () => {
 
     let mockQueryResolverMgr:QueryResolverMgr=new QueryResolverMgr(mockAuthMgr,mockStorageMgr);
     let mockEdgeResolverMgr:EdgeResolverMgr=new EdgeResolverMgr(mockDidResolverMgr,mockStorageMgr);
+    let mockPubSubMgr:PubSubMgr=new PubSubMgr();
     let sut: SchemaMgr;
+    const pubSub =new PubSub();
 
     beforeAll((done) =>{
-        sut = new SchemaMgr(mockQueryResolverMgr, mockEdgeResolverMgr);
+        sut = new SchemaMgr(mockQueryResolverMgr, mockEdgeResolverMgr,mockPubSubMgr);
+        mockPubSubMgr.getPubSub=()=>{return pubSub};
         done();
     })
 

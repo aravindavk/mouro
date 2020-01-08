@@ -4,31 +4,36 @@ const debug = Debug('mouro:PubSubMgr')
 import { PubSub, PubSubEngine } from 'graphql-subscriptions';
 
 import { PostgresPubSub } from "graphql-postgres-subscriptions";
-import { Client } from "pg";
+const { Client } = require('pg')
 
 export class PubSubMgr{
 
     pubSub!:PubSubEngine
+    pubSubClass!:string
 
     constructor(){
         if(process.env.PG_URL){
+            this.pubSubClass="PostgresPubSub";
             (async ()=>{
                 const client = new Client({
                     connectionString: process.env.PG_URL,
                 });
                 await client.connect();
                 this.pubSub = new PostgresPubSub({ client });
-
-                debug("Using PostgresPubSub.")
              })();
         }else{
+            this.pubSubClass="PubSub";
             this.pubSub = new PubSub();
-            debug("Using PubSub (in-memory).")
         }
+
+        debug("Using %s.",this.pubSubClass);
     }
 
 
     getPubSub(){
+        const debug = Debug('mouro:PubSubMgr:getPubSub')
+
+        debug("%s init: %o",this.pubSubClass, this.pubSub!==undefined);
         return this.pubSub;
     }
 }

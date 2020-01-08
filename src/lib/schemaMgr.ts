@@ -3,7 +3,7 @@ const debug = Debug('mouro:SchemaMgr')
 
 
 const makeExecutableSchema = require('graphql-tools').makeExecutableSchema;
-import { PubSub, withFilter } from 'graphql-subscriptions';
+import { withFilter } from 'graphql-subscriptions';
 import { readFileSync } from 'fs'
 import { QueryResolverMgr } from './queryResolverMgr'
 import { EdgeResolverMgr } from './edgeResolverMgr';
@@ -31,7 +31,7 @@ export class SchemaMgr {
 
     _getResolvers(){
 
-        const pubsub = this.pubSubMgr.getPubSub();
+        const pubSubMgr = this.pubSubMgr; 
 
         return {
             Query: {
@@ -81,7 +81,7 @@ export class SchemaMgr {
                     debug("this.edgeResolverMgr.addEdge success")
 
                     debug("pubsub.publish %j",{ edgeAdded: res })
-                    await pubsub.publish('EDGE_ADDED', { edgeAdded: res });
+                    await pubSubMgr.getPubSub().publish('EDGE_ADDED', { edgeAdded: res });
                     debug("pubsub.publish success")
                     return res
                 }, 
@@ -89,7 +89,7 @@ export class SchemaMgr {
             Subscription: {
                 edgeAdded:{
                   subscribe: withFilter(
-                    () => pubsub.asyncIterator('EDGE_ADDED'),
+                    () => pubSubMgr.getPubSub().asyncIterator('EDGE_ADDED'),
                     (payload, args,context) => {
                       const debug = Debug('mouro:SchemaMgr:Subscription:edgeAdded:subscribe')
                     
