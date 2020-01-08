@@ -30,20 +30,32 @@ export class SchemaMgr {
             Query: {
                 //Return identity for the API token issuer
                 me: async (parent: any, args: any, context: any, info: any) => {
-                    debug("Query.me: %j %j %j %j",parent,args,context,info)
+                    const debug = Debug('mouro:SchemaMgr:Query:me')
+                    debug("%j %j %j %j",parent,args,context,info)
+
+                    debug("this.queryResolverMgr.me %j",context.headers);
                     const res=await this.queryResolverMgr.me(context.headers)
+                    debug("this.queryResolverMgr.me success");
                     return res
                 },
                 // Return an edge by hash
                 edgeByHash: async (parent: any, args: any, context: any, info: any) => {
-                    debug("Query.edgeByHash: %j %j %j %j",parent,args,context,info)
+                    const debug = Debug('mouro:SchemaMgr:Query:edgeByHash')
+                    debug("%j %j %j %j",parent,args,context,info)
+
+                    debug("this.queryResolverMgr.edgeByHash %j %j",context.headers, args.hash);
                     const res=await this.queryResolverMgr.edgeByHash(context.headers,args.hash)
+                    debug("this.queryResolverMgr.edgeByHash success");
                     return res
                 },
                 //Find edges
                 findEdges: async (parent: any, args: any, context: any, info: any) => {
-                    debug("Query.findEdges: %j %j %j %j",parent,args,context,info)
+                    const debug = Debug('mouro:SchemaMgr:Query:findEdges')
+                    debug("%j %j %j %j",parent,args,context,info)
+                    
+                    debug("this.queryResolverMgr.findEdges %j %j",context.headers, args);
                     const res=await this.queryResolverMgr.findEdges(context.headers,args)
+                    debug("this.queryResolverMgr.findEdges success");
                     return res
                 },
             },
@@ -54,9 +66,16 @@ export class SchemaMgr {
             },
             Mutation: {
                 addEdge: async (parent: any, args: any, context: any, info: any) => {
-                    debug("Mutation.addEdge: %j %j %j %j",parent,args,context,info)
+                    const debug = Debug('mouro:SchemaMgr:Mutation:addEdge')
+                    debug("%j %j %j %j",parent,args,context,info)
+
+                    debug("this.edgeResolverMgr.addEdge %s",args.edgeJWT)
                     const res=await this.edgeResolverMgr.addEdge(args.edgeJWT)
-                    pubsub.publish('EDGE_ADDED', { edgeAdded: res });
+                    debug("this.edgeResolverMgr.addEdge success")
+
+                    debug("pubsub.publish %j",{ edgeAdded: res })
+                    await pubsub.publish('EDGE_ADDED', { edgeAdded: res });
+                    debug("pubsub.publish success")
                     return res
                 }, 
             },
@@ -65,7 +84,9 @@ export class SchemaMgr {
                   subscribe: withFilter(
                     () => pubsub.asyncIterator('EDGE_ADDED'),
                     (payload, args,context) => {
-                      debug("Subscription.edgeAdded.subscribe: %j %j %j %j",payload,args,context)
+                      const debug = Debug('mouro:SchemaMgr:Subscription:edgeAdded:subscribe')
+                    
+                      debug("%j %j %j",payload,args,context)
   
                       const edge=payload.edgeAdded;
                       const authData=context.authData;
@@ -77,7 +98,7 @@ export class SchemaMgr {
                       if(edge.visibility=='BOTH' && 
                             (edge.to.did==authData.user || edge.from.did==authData.user)) isAllowed=true;
                     
-                      debug("Subscription.edgeAdded.subscribe isAllowed: %j",isAllowed);
+                      debug("isAllowed: %j",isAllowed);
 
                       //Args filters
                       const inFromDID=((!args.fromDID) || (args.fromDID && args.fromDID.indexOf(edge.from.did)>= 0))
@@ -85,7 +106,12 @@ export class SchemaMgr {
                       const inType=((!args.type) || (args.type && args.type.indexOf(edge.type)>= 0))
                       const inTag=((!args.tag) || (args.tag && args.tag.indexOf(edge.tag)>= 0))
                       
-                      return isAllowed && inFromDID && inToDID && inType && inTag ;
+                      debug("inFromDID:%j inToDID:%j inType:%j inTag:%j",inFromDID,inToDID,inType,inTag);
+                      
+                      const ret=isAllowed && inFromDID && inToDID && inType && inTag
+                      debug("ret %j",ret);
+
+                      return ret ;
                     }
                   ),
                 }
