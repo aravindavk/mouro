@@ -7,15 +7,22 @@ import { PubSub, withFilter } from 'graphql-subscriptions';
 import { readFileSync } from 'fs'
 import { QueryResolverMgr } from './queryResolverMgr'
 import { EdgeResolverMgr } from './edgeResolverMgr';
+import { PubSubMgr } from './pubSubMgr';
 
 export class SchemaMgr {
 
     queryResolverMgr: QueryResolverMgr;
     edgeResolverMgr: EdgeResolverMgr;
+    pubSubMgr: PubSubMgr;
 
-    constructor(queryResolverMgr: QueryResolverMgr, edgeResolverMgr: EdgeResolverMgr) {
+    constructor(
+            queryResolverMgr: QueryResolverMgr, 
+            edgeResolverMgr: EdgeResolverMgr, 
+            pubSubMgr: PubSubMgr
+    ) {
         this.queryResolverMgr = queryResolverMgr
         this.edgeResolverMgr = edgeResolverMgr
+        this.pubSubMgr = pubSubMgr;
     }
 
     _getTypeDefs(){
@@ -24,7 +31,7 @@ export class SchemaMgr {
 
     _getResolvers(){
 
-        const pubsub = new PubSub();
+        const pubsub = this.pubSubMgr.getPubSub();
 
         return {
             Query: {

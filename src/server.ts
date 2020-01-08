@@ -5,6 +5,7 @@ const debug = Debug('mouro:server')
 import {DidResolverMgr} from './lib/didResolverMgr';
 import {AuthMgr} from './lib/authMgr';
 import {StorageMgr} from './lib/storageMgr';
+import {PubSubMgr} from './lib/pubSubMgr';
 import {QueryResolverMgr} from "./lib/queryResolverMgr";
 import {EdgeResolverMgr} from './lib/edgeResolverMgr';
 import {SchemaMgr} from './lib/schemaMgr';
@@ -13,9 +14,10 @@ import {SchemaMgr} from './lib/schemaMgr';
 let didResolverMgr = new DidResolverMgr();
 let authMgr = new AuthMgr(didResolverMgr);
 let storageMgr = new StorageMgr();
+let pubSubMgr = new PubSubMgr();
 let queryResolverMgr = new QueryResolverMgr(authMgr,storageMgr);
 let edgeResolverMgr = new EdgeResolverMgr(didResolverMgr,storageMgr);
-let schemaMgr = new SchemaMgr(queryResolverMgr,edgeResolverMgr);
+let schemaMgr = new SchemaMgr(queryResolverMgr,edgeResolverMgr,pubSubMgr);
 
 const { ApolloServer } = require('apollo-server-express');
 const schema = schemaMgr.getSchema()
