@@ -19,6 +19,8 @@ module.exports = class PgMgr implements StorageInterface{
   }
 
   async init(){
+    const debug = Debug('mouro:PgMgr:init')
+
     const sql=`
     CREATE TABLE IF NOT EXISTS edges
     (
@@ -39,9 +41,12 @@ module.exports = class PgMgr implements StorageInterface{
     const client = this._getClient();
     try {
       await client.connect()
+      debug("client.query %s",sql)
       const res = await client.query(sql);
+      debug("client query success")
       return res;
     } catch (e) {
+      debug(e)
       throw (e);
     } finally {
       await client.end()
@@ -49,6 +54,8 @@ module.exports = class PgMgr implements StorageInterface{
   }
 
   async addEdge(edge: PersistedEdgeType){
+    const debug = Debug('mouro:PgMgr:addEdge')
+
     //Store edge
     const sql=`
     INSERT INTO edges
@@ -71,8 +78,11 @@ module.exports = class PgMgr implements StorageInterface{
     `
     const client = this._getClient();
     try {
+      debug("client.connect");
       await client.connect()
-      const res = await client.query(sql,[
+      debug("client.connect success");
+
+      const values=[
         edge.hash,
         edge.from,
         edge.to,
@@ -83,9 +93,13 @@ module.exports = class PgMgr implements StorageInterface{
         edge.tag,
         edge.data,
         edge.jwt
-      ]);
+      ]
+      debug("client.query %s %j",sql,values)
+      const res = await client.query(sql,values);
+      debug("client.query success");
       return res;
     } catch (e) {
+      debug(e);
       throw (e);
     } finally {
       await client.end()
@@ -93,20 +107,26 @@ module.exports = class PgMgr implements StorageInterface{
   }
 
   async getEdge(hash: string, authData: AuthDataType | null){
+    const debug = Debug('mouro:PgMgr:getEdge')
+
     let whereClause=sql.eq('hash',hash);
     
     //Add perms to whereClause
     whereClause = sql.and(whereClause,this._getPermsReadWhere(authData))
     
     const q=sql.select().from('edges').where(whereClause).toString();
-    debug("getEdge query: %s",q);
-    
     const client = this._getClient();
     try {
+      debug("client.connect");
       await client.connect()
+      debug("client.connect success");
+
+      debug("client.query %s",q)
       const res = await client.query(q);
+      debug("client.query success");
       return res.rows[0];
     } catch (e) {
+      debug(e);
       throw (e);
     } finally {
       await client.end()
@@ -114,9 +134,10 @@ module.exports = class PgMgr implements StorageInterface{
   }
 
   async findEdges(args: any, authData: AuthDataType | null){
+    const debug = Debug('mouro:PgMgr:findEdges')
+    debug("args: %j",args)
     //find edges
     let where={};
-    debug("findEdges args: %j",args)
     
     if(args.fromDID) where=sql.and(where,sql.in('from',args.fromDID))
     if(args.toDID)   where=sql.and(where,sql.in('to'  ,args.toDID))
@@ -131,14 +152,19 @@ module.exports = class PgMgr implements StorageInterface{
       .where(where)
       .orderBy('time')
       .toString();
-      debug("findEdges query: %s",q);
 
     const client = this._getClient();
     try {
+      debug("client.connect");
       await client.connect()
+      debug("client.connect success");
+
+      debug("client.query %s",q)
       const res = await client.query(q);
+      debug("client.query success");
       return res.rows;
     } catch (e) {
+      debug(e);
       throw (e);
     } finally {
       await client.end()

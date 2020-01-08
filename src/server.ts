@@ -37,9 +37,11 @@ const server = new ApolloServer({
   schema,
   subscriptions: {
     onConnect: async(headers: any) => {
-      debug("onConnect: %j",headers);
+      const debug = Debug('mouro:server:subscriptions:onConnect')
+
+      debug("headers: %j",headers);
       const authData=await authMgr.getAuthData(headers);
-      debug("onConnect authData: %j",authData);
+      debug("authData: %j",authData);
       return {authData};
     },
   },
